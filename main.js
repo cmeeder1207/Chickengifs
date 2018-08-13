@@ -1,23 +1,23 @@
 
-var chickenSound = document.createElement('audio')
-chickenSound.setAttribute("src","assets/chicken - chicken.mp3")
+// var chickenSound = document.createElement('audio')
+// chickenSound.setAttribute("src","assets/chicken - chicken.mp3")
 
-$('.chicken').on("click",function(){chickenSound.play()});
+// $('.chicken').on("click",function(){chickenSound.play()});
 
-var wonkaSound = document.createElement('audio')
-wonkaSound.setAttribute("src","assets/wonka.mp3")
+// var wonkaSound = document.createElement('audio')
+// wonkaSound.setAttribute("src","assets/wonka.mp3")
 
-$('.wonka').on("click",function(){wonkaSound.play()});
+// $('.wonka').on("click",function(){wonkaSound.play()});
 
-var thomasSound = document.createElement('audio')
-thomasSound.setAttribute("src","assets/thomas.mp3")
+// var thomasSound = document.createElement('audio')
+// thomasSound.setAttribute("src","assets/thomas.mp3")
 
-$('.thomas').on("click",function(){thomasSound.play()});
+// $('.thomas').on("click",function(){thomasSound.play()});
 
-var kermitSound = document.createElement('audio')
-kermitSound.setAttribute("src","assets/kermit.mp3")
+// var kermitSound = document.createElement('audio')
+// kermitSound.setAttribute("src","assets/kermit.mp3")
 
-$('.kermit').on("click",function(){kermitSound.play()});
+// $('.kermit').on("click",function(){kermitSound.play()});
 
 
 
@@ -29,7 +29,9 @@ $('.kermit').on("click",function(){kermitSound.play()});
 
     var term=$(this).attr("data-name");
   //
-  var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" + term;
+  
+  var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+  term + "&api_key=dc6zaTOxFJmzC&limit=10";
 
 
     
@@ -43,34 +45,41 @@ $('.kermit').on("click",function(){kermitSound.play()});
 
   // After the data from the AJAX request comes back
     .then(function(response) {
+      // debugger;
     console.log(response) 
+      var gifs = response.data;
+    for(var i = 0; i < gifs.length; i++){
+      var stillUrl = gifs[i].images.fixed_height_still.url;
+      var moveUrl = gifs[i].images.fixed_height.url;
+    
     // Saving the image_original_url property
-      var stillUrl = response.data.images.fixed_height_still.url;
-      var moveUrl = response.data.images.fixed_height.url;
+     
 
       // Creating and storing an image tag
-      var catImage = $("<img class='img-responsive kitty' style='height: 300px;'>");
+      var Image = $("<img class='img-responsive kitty' style='height: 300px;'>");
 
-      // Setting the catImage src attribute to imageUrl
-      catImage.attr("src", stillUrl);
-      catImage.attr("data-still", stillUrl);
-      catImage.attr("data-animate", moveUrl);
-      catImage.attr('data-state', "still");
-      catImage.attr("alt", "cat image");
+      // Setting the Image src attribute to imageUrl
+      Image.attr("src", stillUrl);
+      Image.attr("data-still", stillUrl);
+      Image.attr("data-animate", moveUrl);
+      Image.attr('data-state', "still");
+      Image.attr("alt", "cat image");
 
-      // Prepending the catImage to the images div
-      $("#images").prepend(catImage);
+      // Prepending the Image to the images div
+      $("#images").prepend(Image);
+    }
     });
 };
 
-$(document).on('click', function(){
+
+$(document).on('click', '.kitty', function(){
   var state = $(this).attr('data-state');
   var moving = $(this).attr('data-animate');
   var still = $(this).attr('data-still');
 
   if(state === "still"){
     $(this).attr('src', moving);
-    $(this).attr('data-state', 'animate');
+    $(this).attr('data-state', 'data-animate');
   }
   else{
     $(this).attr('src', still);
